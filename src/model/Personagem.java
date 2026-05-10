@@ -1,7 +1,6 @@
 package src.model;
 
 import java.util.Map;
-import src.interfaces.Ninja;
 import java.util.HashMap;
 
 public abstract class Personagem {
@@ -36,6 +35,7 @@ public abstract class Personagem {
 
     public void exibirInformacoes() {
         System.out.println("NINJA: " + nome + " [" + this.getClass().getSimpleName() + "]");
+        System.out.println("IDADE: " + idade);
         System.out.println("STATUS: Vida: " + vida + " | Chakra: " + chakra + " | Taxa de Desvio: " + (String.format("%.0f", getTaxaDesvio())) + "%");
         System.out.println("ALDEIA: " + aldeia);
         
@@ -53,12 +53,25 @@ public abstract class Personagem {
         if (this.desviar()) {
             System.out.println(this.nome + " desviou com perfeição!");
         } else {
-            this.vida -= dano;
+            this.vida = Math.max(0, this.vida - dano);
             System.out.println(this.nome + " foi atingido! Vida restante: " + this.vida);
+            if (this.vida == 0) {
+                System.out.println(this.nome + " foi derrotado e não pode mais atacar.");
+            }
         }
     }
 
     public void usarJutsu(String nomeJutsu, Personagem alvo) {
+        if (this.vida <= 0) {
+            System.out.println(this.nome + " está derrotado e não pode atacar.");
+            return;
+        }
+
+        if (alvo.vida <= 0) {
+            System.out.println(alvo.nome + " já está derrotado.");
+            return;
+        }
+
         Jutsu jutsu = this.jutsus.get(nomeJutsu.toLowerCase());
 
         if (jutsu == null) {

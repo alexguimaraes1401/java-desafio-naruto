@@ -15,42 +15,61 @@ public class Main {
 
         while (true) {
             System.out.print("\n> ");
-            String[] comando = scanner.nextLine().split(" ");
+            String entrada = scanner.nextLine().trim();
+            if (entrada.isEmpty()) {
+                continue;
+            }
+
+            String[] comando = entrada.split("\\s+");
             String acao = comando[0].toLowerCase();
 
-            if (acao.equals("sair"))
-                break;
+            switch (acao) {
+                case "sair":
+                    scanner.close();
+                    return;
 
-            if (acao.equals("listar")) {
-                arena.listarPersonagens();
-            } 
+                case "listar":
+                    arena.listarPersonagens();
+                    break;
 
-            if (acao.equals("atacar") && comando.length == 4) {
-                Personagem atacante = arena.buscarNinja(comando[1]);
-                Personagem alvo = arena.buscarNinja(comando[3]);
-                String jutsuNome = comando[2];
+                case "atacar":
+                    if (comando.length != 4) {
+                        System.out.println("Uso correto: atacar [atacante] [jutsu] [alvo]");
+                        break;
+                    }
 
-                if (atacante != null && alvo != null) {
-                    atacante.usarJutsu(jutsuNome, alvo);
-                    arena.processarRegeneracao(atacante.getNome());
-                } else {
-                    System.out.println("Ninja não encontrado!");
-                }
+                    Personagem atacante = arena.buscarNinja(comando[1]);
+                    Personagem alvo = arena.buscarNinja(comando[3]);
+                    String jutsuNome = comando[2];
 
-            }
+                    if (atacante != null && alvo != null) {
+                        atacante.usarJutsu(jutsuNome, alvo);
+                        arena.processarRegeneracao(atacante.getNome());
+                        arena.verificarVencedor();
+                    } else {
+                        System.out.println("Ninja não encontrado!");
+                    }
+                    break;
 
-            if (acao.equals("aprender") && comando.length == 3) {
-                arena.ensinarJutsu(comando[1], comando[2]);
-            }
-            
-            if (acao.equals("catalogo")) {
-                JutsuCatalogo.listarCatalogo();
-            }
+                case "aprender":
+                    if (comando.length != 3) {
+                        System.out.println("Uso correto: aprender [ninja] [jutsu]");
+                        break;
+                    }
+                    arena.ensinarJutsu(comando[1], comando[2]);
+                    break;
 
-            if (acao.equals("ajuda")) {
-                arena.listarComandos();
-            } else {
-                arena.ErroComando(acao);
+                case "catalogo":
+                    JutsuCatalogo.listarCatalogo();
+                    break;
+
+                case "ajuda":
+                    arena.listarComandos();
+                    break;
+
+                default:
+                    arena.ErroComando(acao);
+                    break;
             }
         }
     }

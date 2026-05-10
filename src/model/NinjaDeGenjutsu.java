@@ -21,14 +21,15 @@ public class NinjaDeGenjutsu extends Personagem implements Ninja {
 
     @Override
     public void usarJutsu() {
-        System.out.println(nome + " prepara um golpe físico!");
+        System.out.println(nome + " conjura uma técnica ilusória de Genjutsu!");
     }
 
     @Override
     public boolean desviar() {
+        System.out.println(this.nome + " tenta desviar confundindo o inimigo com Genjutsu...");
         boolean sucesso = Math.random() < this.taxaDesvio;
         if (sucesso) {
-            System.out.println(this.nome + " usou sua agilidade física para desviar!");
+            System.out.println(this.nome + " desviou usando Genjutsu!");
         }
         return sucesso;
     }

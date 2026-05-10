@@ -76,6 +76,7 @@ public class ArenaService {
 
         ninjas.values().stream()
                 .filter(n -> !n.getNome().equalsIgnoreCase(nomeAtacante))
+                .filter(n -> n.getVida() > 0)
                 .forEach(n -> n.aumentarChakra(taxaRegeneracao));
     }
 
